@@ -1,1 +1,33 @@
-version: '3.9'
+version: '3.8'
+
+services:
+  smith:
+    image: ghcr.io/lorecami/holaflask:1.0.0
+    networks:
+      - traefik-public
+
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.lore.entrypoints=http"
+        - "traefik.http.routers.lore.rule=Host(`lore.byronrm.com`)"
+        - "traefik.http.middlewares.lore-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.lore.middlewares=lore-https-redirect"
+        - "traefik.http.routers.lore-secure.entrypoints=https"
+        - "traefik.http.routers.lore-secure.rule=Host(`lore.byronrm.com`)"
+        - "traefik.http.routers.lore-secure.tls=true"
+        - "traefik.http.routers.lore-secure.tls.certresolver=http"
+        - "traefik.http.routers.lore-secure.service=lore"
+        - "traefik.http.services.lore.loadbalancer.server.port=5000"
+        - "traefik.docker.network=traefik-public"
+
+networks:
+  traefik-public:
+    external: true
