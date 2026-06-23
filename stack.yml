@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  smith:
+  lore:
     image: ghcr.io/lorecami/holaflask:1.0.0
     networks:
       - traefik-public
