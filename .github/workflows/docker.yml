@@ -75,7 +75,7 @@ jobs:
           script: |
             cd ~/landinga
 
-            docker pull ghcr.io/lorecami/holaflask-devops:latest
+            docker pull ghcr.io/lorecami/holaflask:1.0.0
 
             docker stack deploy -c stack.yml borrar
 
